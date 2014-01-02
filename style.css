@@ -1,0 +1,39 @@
+
+.jumbotron {
+	text-align: center;
+}
+
+.header {
+  text-align: center;
+}
+
+.nav {
+	padding-right: 30px;
+}
+
+input {
+  color:#ccc;
+}
+
+button {
+  border-radius: 5px;
+}
+
+ul {
+  list-style: none;
+}
+
+.swipe {
+  overflow: hidden;
+  visibility: hidden;
+  position: relative;
+}
+.swipe-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.swipe-wrap > div {
+  float:left;
+  width:100%;
+  position: relative;
+}

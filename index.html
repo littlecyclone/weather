@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Clothes Navi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="http://underscorejs.org/underscore-min.js"></script>
+	<script src="worker.js"></script>
+	<script src="hammer.js"></script>
+	<script src="swipe.js"></script>
+	<link rel="stylesheet" type="text/css" href="dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+   <div class="header">
+        <h1 class="text-muted">Yohou</h1>
+  </div>
+
+  <div class="container">
+    <div id='slider' class='swipe'>
+		  <div class='swipe-wrap'>
+        <div>
+          <div class="jumbotron">
+            <input class="form-control" type="text" value="Enter your city"></input>
+            <button class="btn btn-primary">Add city</button>
+          </div>
+          <ul class='city_list'>
+          </ul>
+        </div>
+      </div>
+		  	<a class="prev" href="#" onclick='mySwipe.prev();return false;'>prev</a> 
+	  	  <a class="next" href="#" onclick='mySwipe.next();return false;'>next</a>
+		</div>
+  </div>
+  <script>
+    $(document).ready(function(){
+    	$('.container').on('click', '.city', function(event){
+    		event.preventDefault();
+    		workers.getQueryKey([$(this).text()]);
+        workers.addCity($(this).text().split(',')[0]);
+    	});
+
+    	$('.container').on('click', 'button', function(event){
+    		event.preventDefault();
+        console.log($('input').val());
+    		workers.getState($('input').val());
+    	});
+
+			navigator.geolocation.getCurrentPosition(workers.getPosition);
+      window.mySwipe = new Swipe(document.getElementById('slider'),{
+        startSlide: 0,
+        speed: 400  
+      });
+      workers.displayMyCity();
+    });
+  	
+  </script>
+</body>
+</html>
