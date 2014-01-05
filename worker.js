@@ -7,6 +7,7 @@ workers.getWeather = function(queryKey){
 		dataType: 'jsonp',
 		success: function(data){
 			console.log(data.current_observation.feelslike_c);
+			workers.displayMyCity(data.current_observation);
 		}
 	});
 };
@@ -29,7 +30,6 @@ workers.getState = function(city){
 	  		}
 	    } else {
 	      workers.getQueryKey(data);
-	      workers.addCity(data[0].split(',')[0]);
 	    };
   	}
   })
@@ -38,51 +38,56 @@ workers.getState = function(city){
 workers.getQueryKey = function(locationArr){
 	var location = locationArr[0].split(',');
   if(location[2] === " United States"){
-  	workers.getWeather(location[1] + '/' + location[0]);
+  	workers.addCity(location[1] + '/' + location[0]);
   	console.log(location[1] + '/' + location[0]);
   } else {
-  	workers.getWeather(location[2] + '/' + location[0]);
+  	workers.addCity(location[2] + '/' + location[0]);
   	console.log(location[2] + '/' + location[0]);
   }
 };
 
-workers.displayMyCity = function(){
-	if(localStorage.city){
-		console.log('displayMyCity');
-		var storage = localStorage.city.split(',');
-		for(var i = 0; storage.length > i; i++){
-			$('.swipe-wrap').append('<div><p>' + storage[i] + '<p></div>');
-		}
-		// workers.addSwipe();
-	};
+workers.displayMyCity = function(data){
+	$('.swipe-wrap').append('<div><h3>' + data.display_location.full + '<h3><p>' + data.feelslike_c + '</p></div>');
+		workers.addSwipe();
 };
 
-workers.addCity = function(city){
+workers.addCity = function(querykey){
   if(typeof(Storage)!== "undefined"){
-  	var cities = [city];
-  	if(localStorage.city){
-  	  var storage = localStorage.city.split(',');
-  	  for(var i = 0; storage.length > i; i++){
-  			cities.push(storage[i]);
+  	if(localStorage.querykey){
+  		var storage = localStorage.querykey.split(',');
+      if(_.every(storage, function(key){return key !== querykey})){
+      	console.log('every');
+  		  var keys = localStorage.querykey + ',' + querykey;
+  		  localStorage.querykey = keys;
+  		  workers.getWeather(querykey);	
+      } else {
+        alert('this city is already in your list');
   	  }
-	  }
-  	  localStorage.city = cities;
-  	$('.swipe-wrap').append('<div><p>' + city + '<p></div>');
-  	// workers.addSwipe();
+	  } else {
+  	localStorage.querykey = querykey;
+  	workers.getWeather(querykey);
+ 		}
   } else {
     console.log('no storage');
   }
 }
 
-// workers.addSwipe = function(){
-// 	console.log('addSwipe');
-// 	window.mySwipe = new Swipe(document.getElementById('slider'),{
-// 	  startSlide: 0,
-// 	  speed: 400
-// 	  // continuous: true,
-// 	  // disableScroll: false,
-// 	  // stopPropagation: false,
-// 	  // callback: function(index, elem) {},
-// 	  // transitionEnd: function(index, elem) {}
-//   });
-// };
+
+workers.addSwipe = function(){
+	console.log('addSwipe');
+	window.mySwipe = new Swipe(document.getElementById('slider'),{
+	  startSlide: 0,
+	  speed: 400
+  });
+  mySwipe.prev();
+};
+
+var init = function() {
+  var card = document.getElementById('card');
+  
+  document.getElementById('flip').addEventListener( 'click', function(){
+    card.toggleClassName('flipped');
+  }, false);
+};
+
+window.addEventListener('DOMContentLoaded', init, false);

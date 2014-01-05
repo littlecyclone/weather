@@ -2,9 +2,9 @@
 <html>
 <head>
 	<title>Clothes Navi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script src="http://underscorejs.org/underscore-min.js"></script>
+	<script src="underscore.js"></script>
 	<script src="worker.js"></script>
 	<script src="hammer.js"></script>
 	<script src="swipe.js"></script>
@@ -16,20 +16,33 @@
         <h1 class="text-muted">Yohou</h1>
   </div>
 
-  <div class="container">
+  <div class="main">
     <div id='slider' class='swipe'>
 		  <div class='swipe-wrap'>
         <div>
-          <div class="jumbotron">
-            <input class="form-control" type="text" value="Enter your city"></input>
-            <button class="btn btn-primary">Add city</button>
-          </div>
-          <ul class='city_list'>
-          </ul>
+<!--           <section class='container'>
+            <div id='card'> -->
+<!--               <figure class='front'> -->
+                <div class="jumbotron">
+                  <input class="form-control" type="text" placeholder="Enter your city"></input>
+                  <button class="btn btn-primary">Add city</button>
+                </div>
+                <ul class='city_list'>
+                </ul>
+<!--               </figure>
+            </div>
+          </section> -->
         </div>
       </div>
-		  	<a class="prev" href="#" onclick='mySwipe.prev();return false;'>prev</a> 
-	  	  <a class="next" href="#" onclick='mySwipe.next();return false;'>next</a>
+        <div class='row'>
+          <div class='pull-left col-md-2'>
+		  	    <a class="prev" href="#" onclick='mySwipe.prev();return false;'>prev</a> 
+	  	      <a class="next" href="#" onclick='mySwipe.next();return false;'>next</a>
+          </div>
+          <div class='pull-right col-md-offset-4 col-md-2'>
+            <a id='flip' class='setting' href="#">setting</a>
+          </div>
+        </div>
 		</div>
   </div>
   <script>
@@ -37,7 +50,8 @@
     	$('.container').on('click', '.city', function(event){
     		event.preventDefault();
     		workers.getQueryKey([$(this).text()]);
-        workers.addCity($(this).text().split(',')[0]);
+        // workers.addCity($(this).text().split(',')[0]);
+        $('.city').remove();
     	});
 
     	$('.container').on('click', 'button', function(event){
@@ -51,7 +65,14 @@
         startSlide: 0,
         speed: 400  
       });
-      workers.displayMyCity();
+      // workers.getWeather();
+      if(localStorage.querykey){
+        var key = localStorage.querykey.split(',');
+        for(var i = 0; key.length > i; i++){
+          workers.getWeather(key[i]);
+        }
+      }
+      // workers.displayMyCity();
     });
   	
   </script>
