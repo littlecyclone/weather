@@ -19,19 +19,20 @@
   <div class="main">
     <div id='slider' class='swipe'>
 		  <div class='swipe-wrap'>
-        <div>
-<!--           <section class='container'>
-            <div id='card'> -->
-<!--               <figure class='front'> -->
-                <div class="jumbotron">
-                  <input class="form-control" type="text" placeholder="Enter your city"></input>
-                  <button class="btn btn-primary">Add city</button>
-                </div>
-                <ul class='city_list'>
-                </ul>
-<!--               </figure>
+        <div id='f1_container'>
+          <div id="f1_card" class='shadow'>
+            <div class='front face'>
+              <div class="jumbotron">
+                <input class="form-control" type="text" placeholder="Enter your city"></input>
+                <button class="btn btn-primary">Add city</button>
+              </div>
+              <ul class='city_list'>
+              </ul>
             </div>
-          </section> -->
+            <div class='back face center'>
+              <p> back </p>
+            </div>
+          </div>
         </div>
       </div>
         <div class='row'>
@@ -40,13 +41,16 @@
 	  	      <a class="next" href="#" onclick='mySwipe.next();return false;'>next</a>
           </div>
           <div class='pull-right col-md-offset-4 col-md-2'>
-            <a id='flip' class='setting' href="#">setting</a>
+            <a class='setting' href="#">setting</a>
           </div>
         </div>
 		</div>
   </div>
   <script>
     $(document).ready(function(){
+      $('.setting').click(function(){
+        $('#f1_card').toggleClass('flip');
+      });
     	$('.container').on('click', '.city', function(event){
     		event.preventDefault();
     		workers.getQueryKey([$(this).text()]);
